@@ -16,10 +16,12 @@ jobs:
     - name: Set DNS Details
       id: set_dns_details
       run: |
-        echo "RECORD_NAME=project0.karazo.com" >> $GITHUB_ENV
+        echo "RECORD_NAME=saad-demo.karazo.com" >> $GITHUB_ENV
         echo "RECORD_TYPE=CNAME" >> $GITHUB_ENV
         echo "RECORD_CONTENT=https://isaadiqbal.github.io/dns-check/" >> $GITHUB_ENV
         echo "TTL=3600" >> $GITHUB_ENV
+        echo "TRIGGER_COUNT=${{ github.run_number }}" >> $GITHUB_ENV
+        echo "DNS_COMMENT=New DNS record. Trigger count: $TRIGGER_COUNT" >> $GITHUB_ENV
 
     - name: Create DNS Record
       run: |
@@ -32,7 +34,7 @@ jobs:
         RECORD_NAME=$RECORD_NAME
         RECORD_CONTENT=$RECORD_CONTENT
         TTL=$TTL
-        DNS_COMMENT="New DNS record"
+        DNS_COMMENT=$DNS_COMMENT
 
         EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME&content=$RECORD_CONTENT")
         
@@ -67,3 +69,5 @@ jobs:
         RECORD_NAME: ${{ env.RECORD_NAME }}
         RECORD_TYPE: ${{ env.RECORD_TYPE }}
         RECORD_CONTENT: ${{ env.RECORD_CONTENT }}
+        TRIGGER_COUNT: ${{ env.TRIGGER_COUNT }}
+        DNS_COMMENT: ${{ env.DNS_COMMENT }}
