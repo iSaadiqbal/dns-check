@@ -1,10 +1,9 @@
-name: DNS DELETE
+name: Delete DNS Record
 
 on:
   push:
     branches:
-      - main  # Replace with your branch name
-  workflow_dispatch:
+      - main
 
 jobs:
   delete-dns-record:
@@ -12,10 +11,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    
     - name: CloudFlare Remove DNS Record
       uses: ScottRocha/remove-dns-record@v2.2
       with:
-        id: ${{ 58994fc64d6ef7a08b87a77291720303 }}  # Replace with the actual DNS record ID
-        token: ${{ HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8}}  # Replace with your CloudFlare API token
-        zone: ${{ 38b42bfdb42dbe301b6b1a27b86ac939 }}  # Replace with your CloudFlare Zone ID
+        id: ${{ secrets.RECORD_ID }}
+        token: ${{ secrets.API_TOKEN }}
+        zone: ${{ secrets.ZONE_ID }}
