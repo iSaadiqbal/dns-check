@@ -19,4 +19,4 @@ jobs:
         sudo apt-get install python3
 
     - name: Create DNS Record
-      run: python3 create_dns_record.py
+      run: python3 python-scripts.py
