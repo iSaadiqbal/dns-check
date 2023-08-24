@@ -16,11 +16,11 @@ jobs:
     - name: Create DNS Record
       run: |
         # Replace placeholders with your actual values
-        CF_API_TOKEN="YOUR_CLOUDFLARE_API_TOKEN"
-        ZONE_ID="YOUR_ZONE_ID"
-        RECORD_NAME="your-subdomain.example.com"
+        CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
+        ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
+        RECORD_NAME="Saad-domain.karazo.com"
         RECORD_TYPE="CNAME"
-        RECORD_CONTENT="https://your-cname-target.example.com"
+        RECORD_CONTENT="https://isaadiqbal.github.io/dns-check/"
         TTL=3600
         DNS_COMMENT="New DNS record"
 
