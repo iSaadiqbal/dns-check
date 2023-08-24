@@ -20,10 +20,11 @@ def send_email(subject, body, recipient_emails):
     except Exception as e:
         print("An error occurred:", e)
 
-trigger_count = int(os.environ.get("GITHUB_RUN_NUMBER", 0))
+# Get the DNS record update details from environment variables
 dns_name = os.environ.get("RECORD_NAME", "")
 dns_type = os.environ.get("RECORD_TYPE", "")
 dns_ip = os.environ.get("RECORD_CONTENT", "")
+trigger_count = os.environ.get("GITHUB_RUN_NUMBER", 0)
 
 dns_result = f'''
 DNS record updated by workflow. Trigger count: {trigger_count}
