@@ -1,0 +1,20 @@
+name: Delete DNS Record
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  delete-dns-record:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: CloudFlare Remove DNS Record
+      uses: ScottRocha/remove-dns-record@v2.2
+      with:
+        id: ${{ secrets.CF_RECORD_ID }}  # Replace with the actual DNS record ID
+        token: ${{ secrets.CF_API_TOKEN }}  # Replace with your CloudFlare API token
+        zone: ${{ secrets.CF_ZONE_ID }}  # Replace with your CloudFlare Zone ID
