@@ -9,7 +9,7 @@ def send_email(subject, body, recipient_emails):
     msg = MIMEText(body)
     msg["Subject"] = subject
     msg["From"] = sender_email
-    msg["To"] = ", ".join(recipient_emails)  # Concatenate email addresses
+    msg["To"] = ", ".join(recipient_emails)
 
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
@@ -25,7 +25,6 @@ dns_name = os.environ.get("RECORD_NAME", "")
 dns_type = os.environ.get("RECORD_TYPE", "")
 dns_ip = os.environ.get("RECORD_CONTENT", "")
 
-# Get the result of the DNS record update from the previous step
 dns_result = f'''
 DNS record updated by workflow. Trigger count: {trigger_count}
 DNS Details:
