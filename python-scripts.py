@@ -26,10 +26,13 @@ with open("all_dns_records.json", "r") as json_file:
     all_dns_records = json.load(json_file)
 
 # Prepare DNS records for the email body
-dns_records_str = "\n".join([f"Name: {record['name']}, Type: {record['type']}, Content: {record['content']}" for record in all_dns_records['result']])
+dns_records_str = "\n".join([f"Name: {record['name']}, Type: {record['type']}, Content: {record['content']}, Action: {record.get('action', 'N/A')}" for record in all_dns_records['result']])
+
+# Get the trigger count from the environment
+trigger_count = os.environ.get("GITHUB_RUN_NUMBER", "N/A")
 
 # Email subject and body
-email_subject = "DNS Records Update Result"
+email_subject = f"DNS Records Update Result - Trigger Count: {trigger_count}"
 email_body = f"DNS records fetched:\n{dns_records_str}"
 
 # Recipient email addresses
