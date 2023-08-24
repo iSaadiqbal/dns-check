@@ -1,9 +1,10 @@
-import os
 import smtplib
 from email.mime.text import MIMEText
+import os
+import requests
 
 def send_email(subject, body, recipient_emails):
-    sender_email = "saadiqbalbutt89@gmail.com"
+    sender_email = "saadbiqbalbutt89@gmail.com"
     sender_password = "slmoutqfqdwmbzui"
     
     msg = MIMEText(body)
@@ -39,9 +40,24 @@ Trigger Count: {trigger_count}
 Comment: {dns_comment}
 """
 
-# Get available DNS records
-available_records = "List of Available DNS Records:\n"
-# Replace with your code to retrieve and format available records using jq or other tools
+# Get available DNS records using Cloudflare API
+CF_API_TOKEN = "your-cloudflare-api-token"
+ZONE_ID = "your-zone-id"
+API_URL = f"https://api.cloudflare.com/client/v4/zones/{ZONE_ID}/dns_records"
+headers = {
+    "Authorization": f"Bearer {CF_API_TOKEN}",
+    "Content-Type": "application/json"
+}
+response = requests.get(API_URL, headers=headers)
+if response.status_code == 200:
+    available_records = "List of Available DNS Records:\n"
+    records = response.json()["result"]
+    for record in records:
+        formatted_record = f"Record Name: {record['name']}\nRecord Type: {record['type']}\nRecord Content: {record['content']}\nTTL: {record['ttl']}\n\n"
+        available_records += formatted_record
+    available_records = available_records.strip()  # Remove trailing newline
+else:
+    available_records = "Failed to retrieve available DNS records."
 
 recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
 send_email("DNS Record Details", dns_details + "\n" + available_records, recipient_emails)
