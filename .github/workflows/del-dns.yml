@@ -1,4 +1,4 @@
-name: Create and Notify DNS Record
+name: DNS DELETE
 
 on:
   push:
