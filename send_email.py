@@ -3,8 +3,8 @@ import smtplib
 from email.mime.text import MIMEText
 
 def send_email(subject, body, recipient_emails):
-    sender_email = "your-sender-email@example.com"
-    sender_password = "your-sender-password"
+    sender_email = "saadiqbalbutt89@gmail.com"
+    sender_password = "slmoutqfqdwmbzui"
     
     msg = MIMEText(body)
     msg["Subject"] = subject
@@ -35,5 +35,5 @@ Record Content: {dns_content}
 TTL: {ttl}
 """
 
-recipient_emails = ["recipient@example.com"]  # Add your recipient email addresses here
+recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
 send_email("DNS Record Details", dns_details, recipient_emails)
