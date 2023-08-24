@@ -14,11 +14,11 @@ TTL = 3600
 DNS_COMMENT = "New DNS record"
 
 # Construct API URL
-API_URL = f"https://api.cloudflare.com/client/v4/zones/38b42bfdb42dbe301b6b1a27b86ac939/dns_records"
+API_URL = f"https://api.cloudflare.com/client/v4/zones/{ZONE_ID}/dns_records"
 
 # Request headers
 headers = {
-    "Authorization": f"Bearer HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8",
+    "Authorization": f"Bearer {CF_API_TOKEN}",
     "Content-Type": "application/json"
 }
 
