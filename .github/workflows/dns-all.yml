@@ -23,7 +23,7 @@ jobs:
         # Replace placeholders with your actual values
         CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
         ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
-        RECORD_NAME="saaddemo.karazo.com"
+        RECORD_NAME="isaadiqbal.karazo.com"
         RECORD_TYPE="CNAME"
         RECORD_CONTENT="192.168.18.250"  # Replace with your IP address
         TTL=3600
