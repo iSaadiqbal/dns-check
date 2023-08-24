@@ -13,9 +13,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set DNS Details
-      id: set_dns_details
       run: |
        echo "DNS_DETAILS=Name: $RECORD_NAME, Type: $RECORD_TYPE, IP Address: $RECORD_CONTENT" >> $GITHUB_ENV
+       
     - name: Create or Update DNS Record
       run: |
         # Replace placeholders with your actual values
@@ -29,7 +29,7 @@ jobs:
         # Construct the API URL
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
         # Check if the DNS record already exists
-        EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME&content=$RECORD_CONTENT")
+        EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME")
         # Create or update the DNS record
         if [[ "$EXISTING_DNS_RECORD" == "[]" ]]; then
           curl -X POST "$API_URL" \
