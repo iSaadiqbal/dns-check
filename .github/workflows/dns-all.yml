@@ -71,3 +71,7 @@ jobs:
         ALL_DNS_RECORDS=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL")
         
         echo "$ALL_DNS_RECORDS" > all_dns_records.json
+        
+    - name: Run Python Script
+      run: |
+        python send_email.py
