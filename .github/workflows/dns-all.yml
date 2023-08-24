@@ -10,13 +10,14 @@ jobs:
   create-dns-record:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Python
-      run: |
-        sudo apt-get update
-        sudo apt-get install python3
+      - name: Install Python
+        run: |
+          sudo apt-get update
+          sudo apt-get install python3
 
-    - name: Create DNS Record
-      run: python3 python-scripts.py
+      - name: Run python-scripts.py
+        run: |
+          python3 python-scripts.py
