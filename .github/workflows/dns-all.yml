@@ -1,60 +1,22 @@
-name: Cloudflare DNS Update and Fetch
+name: Create DNS Record
 
 on:
   push:
     branches:
-      - dns-create-practice
+      - main  # Replace with your branch name
   workflow_dispatch:
 
 jobs:
-  update-dns-record-and-fetch:
+  create-dns-record:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set DNS Details
+    - name: Install Python
       run: |
-        RECORD_NAME="saadiqbal.karazo.com"
-        RECORD_TYPE="CNAME"
-        RECORD_CONTENT="192.168.18.250"
-        echo "RECORD_NAME=$RECORD_NAME" >> $GITHUB_ENV
-        echo "RECORD_TYPE=$RECORD_TYPE" >> $GITHUB_ENV
-        echo "RECORD_CONTENT=$RECORD_CONTENT" >> $GITHUB_ENV
+        sudo apt-get update
+        sudo apt-get install python3
 
     - name: Create DNS Record
-      run: |
-        CF_API_TOKEN="your_cloudflare_api_token"
-        ZONE_ID="your_zone_id"
-        RECORD_NAME="saaddemo.karazo.com"
-        RECORD_TYPE="A"
-        RECORD_CONTENT="192.168.18.250"
-        TTL=3600
-        DNS_COMMENT="New DNS record"
-        
-        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
-        curl -X POST "$API_URL" \
-             -H "Authorization: Bearer $CF_API_TOKEN" \
-             -H "Content-Type: application/json" \
-             --data "{
-               \"type\": \"$RECORD_TYPE\",
-               \"name\": \"$RECORD_NAME\",
-               \"content\": \"$RECORD_CONTENT\",
-               \"ttl\": $TTL,
-               \"comment\": \"$DNS_COMMENT\"
-             }"
-        echo "DNS record created."
-        
-    - name: Fetch All DNS Records
-      run: |
-        CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
-        ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
-        
-        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
-        ALL_DNS_RECORDS=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL")
-        
-        echo "$ALL_DNS_RECORDS" > all_dns_records.json
-        
-    - name: Run Python Script
-      run: |
-        python python-scripts.py
+      run: python3 create_dns_record.py
