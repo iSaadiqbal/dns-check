@@ -1,4 +1,4 @@
-name: Create DNS Record
+name: Create DNS Record and Send Email
 
 on:
   push:
@@ -10,14 +10,56 @@ jobs:
   create-dns-record:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install Python
-        run: |
-          sudo apt-get update
-          sudo apt-get install python3
+    - name: Create DNS Record
+      run: |
+        # Replace placeholders with your actual values
+        CF_API_TOKEN="YOUR_CLOUDFLARE_API_TOKEN"
+        ZONE_ID="YOUR_ZONE_ID"
+        RECORD_NAME="your-subdomain.example.com"
+        RECORD_TYPE="CNAME"
+        RECORD_CONTENT="https://your-cname-target.example.com"
+        TTL=3600
+        DNS_COMMENT="New DNS record"
 
-      - name: Run python-scripts.py
-        run: |
-          python3 python-scripts.py
+        # Construct the API URL
+        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
+
+        # Create the JSON payload for the DNS record
+        JSON_PAYLOAD=$(cat <<- EOM
+        {
+          "type": "$RECORD_TYPE",
+          "name": "$RECORD_NAME",
+          "content": "$RECORD_CONTENT",
+          "ttl": $TTL,
+          "comment": "$DNS_COMMENT"
+        }
+        EOM
+        )
+
+        # Send the POST request to create the DNS record
+        curl -X POST "$API_URL" \
+             -H "Authorization: Bearer $CF_API_TOKEN" \
+             -H "Content-Type: application/json" \
+             --data "$JSON_PAYLOAD"
+
+        echo "DNS record created."
+
+    - name: List DNS Records
+      run: |
+        # List all DNS records using jq for better readability
+        curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Send Email
+      run: |
+        python send_email.py
+
+      env:
+        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}  # Store your API token in GitHub secrets
