@@ -1,12 +1,13 @@
-name: Cloudflare DNS
+name: Cloudflare DNS Update and Fetch
+
 on:
   push:
     branches:
-      - dns-create-practice  # Adjust the branch name as needed
+      - dns-create-practice
   workflow_dispatch:
 
 jobs:
-  create-or-update-dns-record:
+  update-dns-record-and-fetch:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -14,25 +15,26 @@ jobs:
 
     - name: Set DNS Details
       run: |
-       echo "RECORD_NAME=$RECORD_NAME" >> $GITHUB_ENV
-       echo "RECORD_TYPE=$RECORD_TYPE" >> $GITHUB_ENV
-       echo "RECORD_CONTENT=$RECORD_CONTENT" >> $GITHUB_ENV
-       
+        RECORD_NAME="saaddemo.karazo.com"
+        RECORD_TYPE="CNAME"
+        RECORD_CONTENT="192.168.18.250"
+        echo "RECORD_NAME=$RECORD_NAME" >> $GITHUB_ENV
+        echo "RECORD_TYPE=$RECORD_TYPE" >> $GITHUB_ENV
+        echo "RECORD_CONTENT=$RECORD_CONTENT" >> $GITHUB_ENV
+
     - name: Create or Update DNS Record
       run: |
-        # Replace placeholders with your actual values
         CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
         ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
-        RECORD_NAME="isaadiqbal.karazo.com"
+        RECORD_NAME="saaddemo.karazo.com"
         RECORD_TYPE="CNAME"
-        RECORD_CONTENT="192.168.18.250"  # Replace with your IP address
+        RECORD_CONTENT="192.168.18.250"
         TTL=3600
-        DNS_COMMENT="Domain verification record"  # Your comment here
-        # Construct the API URL
+        DNS_COMMENT="Domain verification record"
+        
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
-        # Check if the DNS record already exists
         EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME")
-        # Create or update the DNS record
+        
         if [[ "$EXISTING_DNS_RECORD" == "[]" ]]; then
           curl -X POST "$API_URL" \
                -H "Authorization: Bearer $CF_API_TOKEN" \
@@ -59,6 +61,13 @@ jobs:
                }"
           echo "DNS record updated."
         fi
-    - name: Send Email
+
+    - name: Fetch All DNS Records
       run: |
-        python python-scripts.py     # Replace with your email script file name
+        CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
+        ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
+        
+        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
+        ALL_DNS_RECORDS=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL")
+        
+        echo "$ALL_DNS_RECORDS" > all_dns_records.json
