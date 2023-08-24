@@ -14,7 +14,9 @@ jobs:
 
     - name: Set DNS Details
       run: |
-       echo "DNS_DETAILS=Name: $RECORD_NAME, Type: $RECORD_TYPE, IP Address: $RECORD_CONTENT" >> $GITHUB_ENV
+       echo "RECORD_NAME=$RECORD_NAME" >> $GITHUB_ENV
+       echo "RECORD_TYPE=$RECORD_TYPE" >> $GITHUB_ENV
+       echo "RECORD_CONTENT=$RECORD_CONTENT" >> $GITHUB_ENV
        
     - name: Create or Update DNS Record
       run: |
