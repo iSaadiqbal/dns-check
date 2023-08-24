@@ -14,11 +14,11 @@ TTL = 3600
 DNS_COMMENT = "New DNS record"
 
 # Construct API URL
-API_URL = f"https://api.cloudflare.com/client/v4/zones/{ZONE_ID}/dns_records"
+API_URL = f"https://api.cloudflare.com/client/v4/zones/38b42bfdb42dbe301b6b1a27b86ac939/dns_records"
 
 # Request headers
 headers = {
-    "Authorization": f"Bearer {CF_API_TOKEN}",
+    "Authorization": f"Bearer HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8",
     "Content-Type": "application/json"
 }
 
@@ -38,24 +38,25 @@ if response.status_code == 200:
     print("DNS record created.")
     
     # Send email notification
-    sender_email = "saadiqbalbutt89@gmail.com"
-    sender_password = "slmoutqfqdwmbzui"
-    recipient_email = "saad89.linux@gmail.com"
     subject = "DNS Record Created"
-    body = f"The DNS record '{RECORD_NAME}' has been successfully created."
-    
+    body = f"DNS record for {RECORD_NAME} has been created successfully."
+    recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
+
+    sender_email = "your_sender_email@gmail.com"  # Replace with your sender email
+    sender_password = "your_sender_password"  # Replace with your sender email password
+
     msg = MIMEText(body)
     msg["Subject"] = subject
     msg["From"] = sender_email
-    msg["To"] = recipient_email
-    
+    msg["To"] = ", ".join(recipient_emails)  # Concatenate email addresses
+
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
             server.login(sender_email, sender_password)
-            server.sendmail(sender_email, recipient_email, msg.as_string())
-            print("Email notification sent.")
+            server.sendmail(sender_email, recipient_emails, msg.as_string())
+            print("Email notification sent successfully")
     except Exception as e:
-        print("An error occurred while sending the email:", e)
+        print("An error occurred while sending email:", e)
 else:
     print("Failed to create DNS record. Status code:", response.status_code)
