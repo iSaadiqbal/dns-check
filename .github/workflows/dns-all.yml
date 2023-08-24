@@ -1,4 +1,4 @@
-name: Create DNS Record and Send Email
+name: Create and Notify DNS Record
 
 on:
   push:
@@ -13,53 +13,57 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set DNS Details
+      id: set_dns_details
+      run: |
+        echo "RECORD_NAME=saad-demo.karazo.com >> $GITHUB_ENV
+        echo "RECORD_TYPE=CNAME" >> $GITHUB_ENV
+        echo "RECORD_CONTENT=https://isaadiqbal.github.io/dns-check/" >> $GITHUB_ENV
+        echo "TTL=3600" >> $GITHUB_ENV
+
     - name: Create DNS Record
       run: |
-        # Replace placeholders with your actual values
         CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
         ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
-        RECORD_NAME="Saad-domain.karazo.com"
-        RECORD_TYPE="CNAME"
-        RECORD_CONTENT="https://isaadiqbal.github.io/dns-check/"
-        TTL=3600
+
+        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
+        
+        RECORD_TYPE=$RECORD_TYPE
+        RECORD_NAME=$RECORD_NAME
+        RECORD_CONTENT=$RECORD_CONTENT
+        TTL=$TTL
         DNS_COMMENT="New DNS record"
 
-        # Construct the API URL
+        EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME&content=$RECORD_CONTENT")
+        
+        if [[ "$EXISTING_DNS_RECORD" == "[]" ]]; then
+          curl -X POST "$API_URL" \
+               -H "Authorization: Bearer $CF_API_TOKEN" \
+               -H "Content-Type: application/json" \
+               --data "{
+                 \"type\": \"$RECORD_TYPE\",
+                 \"name\": \"$RECORD_NAME\",
+                 \"content\": \"$RECORD_CONTENT\",
+                 \"ttl\": $TTL,
+                 \"comment\": \"$DNS_COMMENT\"
+               }"
+          echo "DNS record created."
+        else
+          echo "DNS record already exists."
+        fi
+
+    - name: Show Available Records
+      run: |
+        CF_API_TOKEN="your-cloudflare-api-token"
+        ZONE_ID="your-zone-id"
+
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
 
-        # Create the JSON payload for the DNS record
-        JSON_PAYLOAD=$(cat <<- EOM
-        {
-          "type": "$RECORD_TYPE",
-          "name": "$RECORD_NAME",
-          "content": "$RECORD_CONTENT",
-          "ttl": $TTL,
-          "comment": "$DNS_COMMENT"
-        }
-        EOM
-        )
-
-        # Send the POST request to create the DNS record
-        curl -X POST "$API_URL" \
-             -H "Authorization: Bearer $CF_API_TOKEN" \
-             -H "Content-Type: application/json" \
-             --data "$JSON_PAYLOAD"
-
-        echo "DNS record created."
-
-    - name: List DNS Records
-      run: |
-        # List all DNS records using jq for better readability
         curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
-
-    - name: Send Email
-      run: |
-        python send_email.py
-
+    - name: Send Email Notification
+      run: python send_email.py
       env:
-        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}  # Store your API token in GitHub secrets
+        RECORD_NAME: ${{ env.RECORD_NAME }}
+        RECORD_TYPE: ${{ env.RECORD_TYPE }}
+        RECORD_CONTENT: ${{ env.RECORD_CONTENT }}
