@@ -1,9 +1,10 @@
-name: Delete DNS Record
+name: Create and Notify DNS Record
 
 on:
   push:
     branches:
-      - main
+      - main  # Replace with your branch name
+  workflow_dispatch:
 
 jobs:
   delete-dns-record:
