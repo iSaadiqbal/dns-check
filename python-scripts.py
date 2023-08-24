@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 import os
+import json
 
 def send_email(subject, body, recipient_emails):
     sender_email = "saadiqbalbutt89@gmail.com"
@@ -20,17 +21,19 @@ def send_email(subject, body, recipient_emails):
     except Exception as e:
         print("An error occurred:", e)
 
-# Get the DNS record update details from environment variables
-dns_name = os.environ.get("RECORD_NAME", "N/A")
-dns_type = os.environ.get("RECORD_TYPE", "N/A")
-dns_ip = os.environ.get("RECORD_CONTENT", "N/A")
-trigger_count = os.environ.get("GITHUB_RUN_NUMBER", 0)
+# Read all DNS records from the JSON file
+with open("all_dns_records.json", "r") as json_file:
+    all_dns_records = json.load(json_file)
 
-dns_result = f'''
-DNS record updated by workflow. Trigger count: {trigger_count}
-DNS Details:
-  Name: {dns_name}
-  Type: {dns_type}
-  IP Address: {dns_ip}
-'''
-send_email("DNS Record Update Result", dns_result, ["saad89.linux@gmail.com"])
+# Prepare DNS records for the email body
+dns_records_str = "\n".join([f"Name: {record['name']}, Type: {record['type']}, Content: {record['content']}" for record in all_dns_records['result']])
+
+# Email subject and body
+email_subject = "DNS Records Update Result"
+email_body = f"DNS records fetched:\n{dns_records_str}"
+
+# Recipient email addresses
+recipient_emails = ["saad89.linux@gmail.com"]
+
+# Send the email
+send_email(email_subject, email_body, recipient_emails)
