@@ -1,9 +1,10 @@
+import os
 import smtplib
 from email.mime.text import MIMEText
 
 def send_email(subject, body, recipient_emails):
-    sender_email = "saadiqbalbutt89@gmail.com"
-    sender_password = "slmoutqfqdwmbzui"
+    sender_email = "your-sender-email@example.com"
+    sender_password = "your-sender-password"
     
     msg = MIMEText(body)
     msg["Subject"] = subject
@@ -19,14 +20,20 @@ def send_email(subject, body, recipient_emails):
     except Exception as e:
         print("An error occurred:", e)
 
-# DNS details
-dns_details = """
+# Get DNS details from environment variables
+dns_name = os.environ.get("RECORD_NAME", "")
+dns_type = os.environ.get("RECORD_TYPE", "")
+dns_content = os.environ.get("RECORD_CONTENT", "")
+ttl = os.environ.get("TTL", "")
+
+# Prepare DNS details string
+dns_details = f"""
 DNS Record Details:
-Record Name: your-subdomain.example.com
-Record Type: CNAME
-Record Content: https://your-cname-target.example.com
-TTL: 3600
+Record Name: {dns_name}
+Record Type: {dns_type}
+Record Content: {dns_content}
+TTL: {ttl}
 """
 
-recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
+recipient_emails = ["recipient@example.com"]  # Add your recipient email addresses here
 send_email("DNS Record Details", dns_details, recipient_emails)
