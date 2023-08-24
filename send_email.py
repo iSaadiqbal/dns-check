@@ -43,5 +43,5 @@ Comment: {dns_comment}
 available_records = "List of Available DNS Records:\n"
 # Replace with your code to retrieve and format available records using jq or other tools
 
-recipient_emails = ["recipient@example.com"]  # Add your recipient email addresses here
+recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
 send_email("DNS Record Details", dns_details + "\n" + available_records, recipient_emails)
