@@ -16,7 +16,7 @@ jobs:
     - name: Set DNS Details
       id: set_dns_details
       run: |
-        echo "RECORD_NAME=saad-demo.karazo.com >> $GITHUB_ENV
+        echo "RECORD_NAME=saad-demo.karazo.com" >> $GITHUB_ENV
         echo "RECORD_TYPE=CNAME" >> $GITHUB_ENV
         echo "RECORD_CONTENT=https://isaadiqbal.github.io/dns-check/" >> $GITHUB_ENV
         echo "TTL=3600" >> $GITHUB_ENV
