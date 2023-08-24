@@ -42,8 +42,8 @@ if response.status_code == 200:
     body = f"DNS record for {RECORD_NAME} has been created successfully."
     recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
 
-    sender_email = "your_sender_email@gmail.com"  # Replace with your sender email
-    sender_password = "your_sender_password"  # Replace with your sender email password
+    sender_email = "saadiqbalbutt89@gmail.com"  # Replace with your sender email
+    sender_password = "slmoutqfqdwmbzui"  # Replace with your sender email password
 
     msg = MIMEText(body)
     msg["Subject"] = subject
