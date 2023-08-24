@@ -15,7 +15,7 @@ jobs:
 
     - name: Set DNS Details
       run: |
-        RECORD_NAME="saaddemo.karazo.com"
+        RECORD_NAME="saadiqbal.karazo.com"
         RECORD_TYPE="CNAME"
         RECORD_CONTENT="192.168.18.250"
         echo "RECORD_NAME=$RECORD_NAME" >> $GITHUB_ENV
