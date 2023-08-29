@@ -29,7 +29,7 @@ jobs:
     # DNS record name, e.g. "{PR_NUMBER}.example.com"
         name: Tayyub-butt.karazo.com
     # DNS record content, e.g. "127.0.0.1"
-        content: isaadiqbal.github.io  # Remove the "https://" protocol
+        content: isaadiqbal.github.io/dns-check/  # Remove the "https://" protocol
     # Time to live for DNS record. Value of 1 is 'automatic'
         ttl: 3600
     # Whether the record is receiving the performance and security benefits of Cloudflare
