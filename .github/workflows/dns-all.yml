@@ -18,3 +18,24 @@ jobs:
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
 
         curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
+
+    - name: Create and Update Cloudflare DNS Records
+      uses: opszero/actions-cloudflare-dns@v3.0.2
+      with:
+        # DNS record type, e.g. "A", "CNAME", etc.
+        type: CNAME  # Replace with your DNS record type
+
+        # DNS record name, e.g. "{PR_NUMBER}.example.com"
+        name: Tayyub-butt.karazo.com  # Replace with your DNS record name
+
+        # DNS record content, e.g. "127.0.0.1"
+        content: 172.17.0.1  # Replace with your DNS record content
+
+        # Time to live for DNS record. Value of 1 is 'automatic'
+        ttl: 3600  # Replace with your desired TTL
+
+        # CloudFlare API token
+        token: ${{ HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8 }}  # Use GitHub Secrets for secure token storage
+
+        # CloudFlare zone
+        zone: 38b42bfdb42dbe301b6b1a27b86ac939  # Replace with your CloudFlare zone
