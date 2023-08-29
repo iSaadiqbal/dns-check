@@ -23,13 +23,13 @@ jobs:
       uses: opszero/actions-cloudflare-dns@v3.0.2
       with:
         # DNS record type, e.g. "A", "CNAME", etc.
-        type: CNAME  # Replace with your DNS record type
+        type: A  # Replace with your DNS record type
 
         # DNS record name, e.g. "{PR_NUMBER}.example.com"
         name: Tayyub-butt.karazo.com  # Replace with your DNS record name
 
         # DNS record content, e.g. "127.0.0.1"
-        content: isaadiqbal.github.io/dns-check/  # Replace with your DNS record content
+        content: 192.168.18.250  # Replace with your DNS record content
 
         # Time to live for DNS record. Value of 1 is 'automatic'
         ttl: 3600  # Replace with your desired TTL
