@@ -18,24 +18,25 @@ jobs:
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
 
         curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
-
-    - name: Create and Update Cloudflare DNS Records
-      uses: opszero/actions-cloudflare-dns@v3.0.2
+  
+    - name: CloudFlare Create DNS Record
+  # You may pin to the exact commit or the version.
+  # uses: InfraWay/create-dns-record@ece14bee2cfe8021c9141f842335fedde50c4cc0
+      uses: InfraWay/create-dns-record@v2.0
       with:
-        # DNS record type, e.g. "A", "CNAME", etc.
-        type: A  # Replace with your DNS record type
+    # DNS record type, e.g. "A", "CNAME", etc.
+        type: CNAME
+    # DNS record name, e.g. "{PR_NUMBER}.example.com"
+        name: Tayyub-butt.karazo.com
+    # DNS record content, e.g. "127.0.0.1"
+        content: isaadiqbal.github.io  # Remove the "https://" protocol
+    # Time to live for DNS record. Value of 1 is 'automatic'
+        ttl: 3600
+    # Whether the record is receiving the performance and security benefits of Cloudflare
+        proxied: true
+    # CloudFlare API token
+        token: ${{ secrets.API_TOKEN }}
+    # CloudFlare zone
+        zone: 38b42bfdb42dbe301b6b1a27b86ac939
 
-        # DNS record name, e.g. "{PR_NUMBER}.example.com"
-        name: Tayyub-butt.karazo.com  # Replace with your DNS record name
-
-        # DNS record content, e.g. "127.0.0.1"
-        content: 192.168.18.250  # Replace with your DNS record content
-
-        # Time to live for DNS record. Value of 1 is 'automatic'
-        ttl: 3600  # Replace with your desired TTL
-
-        # CloudFlare API token
-        token: ${{ secrets.API_TOKEN}}  # Use GitHub Secrets for secure token storage
-
-        # CloudFlare zone
-        zone: 38b42bfdb42dbe301b6b1a27b86ac939  # Replace with your CloudFlare zone
+   
