@@ -35,7 +35,7 @@ jobs:
         ttl: 3600  # Replace with your desired TTL
 
         # CloudFlare API token
-        token: ${{ HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8 }}  # Use GitHub Secrets for secure token storage
+        token: ${{ secrets.API_TOKEN}}  # Use GitHub Secrets for secure token storage
 
         # CloudFlare zone
         zone: 38b42bfdb42dbe301b6b1a27b86ac939  # Replace with your CloudFlare zone
