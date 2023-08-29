@@ -59,5 +59,5 @@ if response.status_code == 200:
 else:
     available_records = "Failed to retrieve available DNS records."
 
-recipient_emails = ["saad89.linux@gmail.com"]  # Add your recipient email addresses here
+recipient_emails = ["saad89.linux@gmail.com","tayyubtahir87@gmail.com"]  # Add your recipient email addresses here
 send_email("DNS Record Details", dns_details + "\n" + available_records, recipient_emails)
