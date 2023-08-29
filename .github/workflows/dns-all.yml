@@ -10,50 +10,6 @@ jobs:
   create-dns-record:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set DNS Details
-      id: set_dns_details
-      run: |
-        echo "RECORD_NAME=saadiqbalbutt.karazo.com" >> $GITHUB_ENV
-        echo "RECORD_TYPE=CNAME" >> $GITHUB_ENV
-        echo "RECORD_CONTENT=https://isaadiqbal.github.io/dns-check/" >> $GITHUB_ENV
-        echo "TTL=3600" >> $GITHUB_ENV
-        echo "TRIGGER_COUNT=${{ github.run_number }}" >> $GITHUB_ENV
-        echo "DNS_COMMENT=New DNS record. Trigger count: $TRIGGER_COUNT" >> $GITHUB_ENV
-
-    - name: Create DNS Record
-      run: |
-        CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
-        ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"
-
-        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
-        
-        RECORD_TYPE=$RECORD_TYPE
-        RECORD_NAME=$RECORD_NAME
-        RECORD_CONTENT=$RECORD_CONTENT
-        TTL=$TTL
-        DNS_COMMENT=$DNS_COMMENT
-
-        EXISTING_DNS_RECORD=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL?type=$RECORD_TYPE&name=$RECORD_NAME&content=$RECORD_CONTENT")
-        
-        if [[ "$EXISTING_DNS_RECORD" == "[]" ]]; then
-          curl -X POST "$API_URL" \
-               -H "Authorization: Bearer $CF_API_TOKEN" \
-               -H "Content-Type: application/json" \
-               --data "{
-                 \"type\": \"$RECORD_TYPE\",
-                 \"name\": \"$RECORD_NAME\",
-                 \"content\": \"$RECORD_CONTENT\",
-                 \"ttl\": $TTL,
-                 \"comment\": \"$DNS_COMMENT\"
-               }"
-          echo "DNS record created."
-        else
-          echo "DNS record already exists."
-        fi
-
     - name: Show Available Records
       run: |
         CF_API_TOKEN="HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8"
@@ -62,12 +18,3 @@ jobs:
         API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
 
         curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
-
-    - name: Send Email Notification
-      run: python send_email.py
-      env:
-        RECORD_NAME: ${{ env.RECORD_NAME }}
-        RECORD_TYPE: ${{ env.RECORD_TYPE }}
-        RECORD_CONTENT: ${{ env.RECORD_CONTENT }}
-        TRIGGER_COUNT: ${{ env.TRIGGER_COUNT }}
-        DNS_COMMENT: ${{ env.DNS_COMMENT }}
