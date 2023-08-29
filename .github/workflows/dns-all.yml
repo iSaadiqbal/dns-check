@@ -19,24 +19,15 @@ jobs:
 
         curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$API_URL" | jq .
   
-    - name: CloudFlare Create DNS Record
+    - name: Create/Update CloudFlare DNS Records
   # You may pin to the exact commit or the version.
-  # uses: InfraWay/create-dns-record@ece14bee2cfe8021c9141f842335fedde50c4cc0
-      uses: InfraWay/create-dns-record@v2.0
+  # uses: everpcpc/cloudflare-dns-action@0ad4c3673f7d2cba45350befaab2f50f574c963e
+      uses: everpcpc/cloudflare-dns-action@v1
       with:
-    # DNS record type, e.g. "A", "CNAME", etc.
         type: CNAME
-    # DNS record name, e.g. "{PR_NUMBER}.example.com"
         name: Tayyub-butt.karazo.com
-    # DNS record content, e.g. "127.0.0.1"
-        content: isaadiqbal.github.io/dns-check/  # Remove the "https://" protocol
-    # Time to live for DNS record. Value of 1 is 'automatic'
-        ttl: 3600
-    # Whether the record is receiving the performance and security benefits of Cloudflare
-        proxied: true
-    # CloudFlare API token
-        token: ${{ secrets.API_TOKEN }}
-    # CloudFlare zone
+        content: isaadiqbal.github.io/dns-check/
+        ttl: 36000
+        apiKey: HsoabgfSbNQVeHpg30hI14GOo8mZLixzk_7HhJY8
         zone: 38b42bfdb42dbe301b6b1a27b86ac939
-
    
